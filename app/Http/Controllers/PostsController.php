@@ -24,7 +24,7 @@ class PostsController extends Controller
         $validatedData['user_id'] = \Auth::id();
         if ($request->hasFile('img')) {
             $file = $request->file('img');
-            $file->move(public_path('\img'), $file->getClientOriginalName());
+            $file->move(public_path('img'), $file->getClientOriginalName());
 
             $validatedData['img'] = $file->getClientOriginalName();
         }
@@ -60,7 +60,7 @@ class PostsController extends Controller
         if ($request->hasFile('img')) {
             $file = $request->file('img');
             $fileName = $file->getClientOriginalName(); //
-            $file->move(public_path('\img'), $file->getClientOriginalName());
+            $file->move(public_path('img'), $file->getClientOriginalName());
             $validatedData['img'] = $file->getClientOriginalName();
 
         }

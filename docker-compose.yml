@@ -1,26 +1,55 @@
-version: '3'
+version: '3.3'
+
 services:
-  app:
+  app-blog:
     build:
       context: .
       dockerfile: Dockerfile
-    volumes:
-      - .:/var/www
-    ports:
-      - 8000:9000
+    image: app-blog
+    container_name: app-blog
+    environment:
+      DB_HOST: db-blog
+      DB_PORT: 3306
+      DB_DATABASE: blog
+      DB_USERNAME: root
+      DB_PASSWORD: blog
+      # FILESYSTEM_DRIVER: public
     networks:
-      - laravel
-
-  nginx:
-    image: nginx:latest
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    ports:
-      - 80:80
-    networks:
-      - laravel
+      - blog-network
     depends_on:
-      - app
+      - db-blog
+    volumes:
+      - ./:/var/www
+
+  db-blog:
+    image: mysql:5.7.22
+    container_name: db-blog
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: blog
+      MYSQL_DATABASE: blog
+    volumes:
+      - db-blog:/var/lib/mysql/
+    networks:
+      - blog-network
+
+  nginx-blog:
+    image: nginx:latest
+    container_name: nginx-blog
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www/
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app-blog
+    networks:
+      - blog-network
 
 networks:
-  laravel:
+  blog-network:
+    driver: bridge
+
+volumes:
+  db-blog:

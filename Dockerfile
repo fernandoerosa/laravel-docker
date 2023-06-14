@@ -27,9 +27,14 @@ RUN composer install --no-interaction
 
 # Define o usuário do PHP-FPM como "www-data"
 RUN chown -R www-data:www-data /var/www/storage
+RUN chmod -R 777 /var/www/storage/
 
 # Define a porta que o container deve expor
 EXPOSE 9000
 
+RUN php artisan optimize
+
+RUN composer dump-autoload
+
 # Executa o servidor PHP-FPM
-CMD ["php-fpm"]
+ENTRYPOINT ["sh",  "./docker/entrypoint.sh"]
