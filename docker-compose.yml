@@ -25,7 +25,7 @@ services:
     image: mysql:5.7.22
     container_name: db-blog
     ports:
-      - "3307:3306"
+      - "3307:3306" 
     environment:
       MYSQL_ROOT_PASSWORD: blog
       MYSQL_DATABASE: blog
